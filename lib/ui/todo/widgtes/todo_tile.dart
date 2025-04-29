@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/typedefs/todos.dart';
+import '../../../utils/typedefs/todos.dart';
 import '../../../domain/models/todo.dart';
 import '../viewmodels/todo_view_model.dart';
 
