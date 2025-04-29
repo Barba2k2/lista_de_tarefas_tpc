@@ -1,4 +1,4 @@
-import '../../../core/result/result.dart';
+import '../../../utils/result/result.dart';
 import '../../../domain/models/todo.dart';
 import 'todos_repository.dart';
 
@@ -18,7 +18,7 @@ class TodosRepositoryDev implements TodosRepository {
   }
 
   @override
-  Future<Result<void>> delele(Todo todo) async {
+  Future<Result<void>> delete(Todo todo) async {
     if (_todos.contains(todo)) {
       _todos.remove(todo);
     }
