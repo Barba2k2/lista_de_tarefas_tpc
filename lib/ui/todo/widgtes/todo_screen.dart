@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
 
+import '../viewmodels/todo_view_model.dart';
+import 'todo_list.dart';
+
 class TodoScreen extends StatelessWidget {
-  const TodoScreen({super.key});
+  final TodoViewModel todoViewModel;
+  
+  const TodoScreen({
+    super.key,
+    required this.todoViewModel, //
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo'),
+        title: const Text('Todo'), //
       ),
-      body: const Center(
-        child: Text('Todo'),
+      body: ListenableBuilder(
+        listenable: todoViewModel.load,
+        builder: (context, child) {
+          if (todoViewModel.load.running) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+
+          if (todoViewModel.load.error) {
+            return Center(child: Text('An error ocurred on load todos... =('));
+          }
+
+          return child!;
+        },
+
+        child: ListenableBuilder(
+          listenable: todoViewModel,
+          builder: (context, child) {
+            return TodoList(todos: todoViewModel.todos);
+          },
+        ),
       ),
     );
   }
