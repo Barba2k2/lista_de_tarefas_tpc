@@ -43,7 +43,7 @@ void main() {
 
       final result = await apiClient.updateTodo(
         UpdateTodoApiModel(
-          id: createdTodoResult.asOk.value.id!,
+          id: createdTodoResult.asOk.value.id,
           name: "${createdTodoResult.asOk.value.name} updatedDate ${DateTime.now().toIso8601String()}",
         ),
       );
