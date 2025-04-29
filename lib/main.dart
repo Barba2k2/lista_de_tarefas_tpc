@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'ui/todo/viewmodels/todo_view_model.dart';
 import 'ui/todo/widgtes/todo_screen.dart';
 
 void main() {
@@ -17,7 +18,9 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: false,
       ),
-      home: const TodoScreen(),
+      home: TodoScreen(
+        todoViewModel: TodoViewModel(),
+      ),
     );
   }
 }
