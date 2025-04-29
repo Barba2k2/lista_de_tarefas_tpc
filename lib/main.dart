@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'data/repository/todos/todos_repository_dev.dart';
 import 'ui/todo/viewmodels/todo_view_model.dart';
 import 'ui/todo/widgtes/todo_screen.dart';
 
@@ -16,10 +17,12 @@ class MainApp extends StatelessWidget {
       title: 'Lista de Tarefas',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        useMaterial3: false,
+        useMaterial3: false, //
       ),
       home: TodoScreen(
-        todoViewModel: TodoViewModel(),
+        todoViewModel: TodoViewModel(
+          todosRepository: TodosRepositoryDev(), //
+        ),
       ),
     );
   }
