@@ -16,5 +16,13 @@ void main() {
 
       expect(result.asOk.value, isA<List<Todo>>());
     });
+
+    test('Should return Result Ok when postTodo()', () async {
+      final todoToCreate = Todo(name: 'Todo created on TEST');
+
+      final result = await apiClient.postTodo(todoToCreate);
+
+      expect(result.asOk.value, isA<Todo>());
+    });
   });
 }
