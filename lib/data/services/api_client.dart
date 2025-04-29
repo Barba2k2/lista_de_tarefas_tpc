@@ -5,10 +5,13 @@ import '../../domain/models/todo.dart';
 import '../../utils/result/result.dart';
 
 class ApiClient {
-  ApiClient({String? host, int? port, HttpClient Function()? clientHttpFactory})
-    : _host = host ?? 'localhost',
-      _port = port ?? 3000,
-      _clientHttpFactory = clientHttpFactory ?? HttpClient.new;
+  ApiClient({
+    String? host,
+    int? port,
+    HttpClient Function()? clientHttpFactory, //
+  }) : _host = host ?? 'localhost',
+       _port = port ?? 3000,
+       _clientHttpFactory = clientHttpFactory ?? HttpClient.new;
 
   final String _host;
   final int _port;
@@ -25,9 +28,9 @@ class ApiClient {
       if (response.statusCode != HttpStatus.ok) {
         final stringData = await response.transform(utf8.decoder).join();
 
-        final json = jsonDecode(stringData) as List<Map<String, dynamic>>;
+        final json = jsonDecode(stringData) as List<dynamic>;
 
-        final List<Todo> todos = json.map(Todo.fromJson).toList();
+        final List<Todo> todos = json.map((e) => Todo.fromJson(e)).toList();
 
         return Result.ok(todos);
       } else {
