@@ -3,13 +3,13 @@ import 'package:flutter/widgets.dart';
 import '../result/result.dart';
 
 // Command 0 dont have input parameters
-typedef CommandAction0<Output extends Object> = Future<Result<Output>> Function();
+typedef CommandAction0<Output> = Future<Result<Output>> Function();
 
 // Command 1 have input parameters
-typedef CommandAction1<Output extends Object, Input extends Object> =
+typedef CommandAction1<Output, Input> =
     Future<Result<Output>> Function(Input);
 
-abstract class Command<Output extends Object> extends ChangeNotifier {
+abstract class Command<Output> extends ChangeNotifier {
   // Verify if the command is running
   bool _running = false;
 
@@ -47,7 +47,7 @@ abstract class Command<Output extends Object> extends ChangeNotifier {
   }
 }
 
-class Command0<Output extends Object> extends Command<Output> {
+class Command0<Output> extends Command<Output> {
   final CommandAction0<Output> action;
   Command0(this.action);
 
@@ -56,7 +56,7 @@ class Command0<Output extends Object> extends Command<Output> {
   }
 }
 
-class Command1<Output extends Object, Input extends Object> extends Command<Output> {
+class Command1<Output, Input> extends Command<Output> {
   final CommandAction1<Output, Input> action;
   Command1(this.action);
 
