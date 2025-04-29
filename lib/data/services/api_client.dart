@@ -3,6 +3,7 @@ import 'dart:io';
 
 import '../../domain/models/todo.dart';
 import '../../utils/result/result.dart';
+import 'models/todo/todo_api_model.dart';
 
 class ApiClient {
   ApiClient({
@@ -45,16 +46,46 @@ class ApiClient {
     }
   }
 
-  Future<Result<Todo>> postTodo(Todo todo) async {
+  Future<Result<Todo>> updateTodo(UpdateTodoApiModel todo) async {
+    final client = _clientHttpFactory();
+
+    try {
+      final request = await client.put(_host, _port, '/todos/${todo.id}');
+
+      request.write(
+        jsonEncode(todo.toJson()), //
+      );
+
+      final response = await request.close();
+
+      if (response.statusCode == HttpStatus.created) {
+        final stringData = await response.transform(utf8.decoder).join();
+
+        final json = jsonDecode(stringData) as Map<String, dynamic>;
+
+        final createdTodo = Todo.fromJson(json);
+
+        return Result.ok(createdTodo);
+      } else {
+        return Result.error(
+          const HttpException('Invalid response'), //
+        );
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<Result<Todo>> postTodo(CreateTodoApiModel todo) async {
     final client = _clientHttpFactory();
 
     try {
       final request = await client.post(_host, _port, '/todos');
 
       request.write(
-        jsonEncode({
-          'name': todo.name, //
-        }),
+        jsonEncode(todo.toJson()), //
       );
 
       final response = await request.close();
