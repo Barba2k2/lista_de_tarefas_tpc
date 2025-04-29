@@ -52,11 +52,9 @@ class ApiClient {
       final request = await client.post(_host, _port, '/todos');
 
       request.write(
-        jsonEncode(
-          {
-            'name': todo.name, //
-          },
-        ),
+        jsonEncode({
+          'name': todo.name, //
+        }),
       );
 
       final response = await request.close();
@@ -76,6 +74,30 @@ class ApiClient {
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<Result<void>> deleteTodo(Todo todo) async {
+    final client = _clientHttpFactory();
+
+    try {
+      final request = await client.delete(_host, _port, '/todos/${todo.id}');
+
+      final result = await request.close();
+
+      if (result.statusCode == HttpStatus.ok) {
+        return Result.ok(null);
+      }
+
+      return Result.error(
+        const HttpException('Invalid response'), //
+      );
+    } on Exception catch (e) {
+      return Result.error(e);
+    } finally {
+      client.close();
     }
   }
 }
