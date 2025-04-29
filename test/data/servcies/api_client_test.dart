@@ -24,5 +24,16 @@ void main() {
 
       expect(result.asOk.value, isA<Todo>());
     });
+
+    test('Should return Result Ok when deleteTodo()', () async {
+      final todoToCreate = Todo(name: 'Todo created on TEST');
+
+      final createdTodoResult = await apiClient.postTodo(todoToCreate);
+
+      final result = await apiClient.deleteTodo(createdTodoResult.asOk.value);
+
+      expect(result.asOk, isA<Result<void>>());
+      
+    });
   });
 }
