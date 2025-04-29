@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lista_de_tarefas_tpc/core/command/command.dart';
-import 'package:lista_de_tarefas_tpc/core/result/result.dart';
+import 'package:lista_de_tarefas_tpc/utils/command/command.dart';
+import 'package:lista_de_tarefas_tpc/utils/result/result.dart';
 
 void main() {
   group('Should test Command', () {
