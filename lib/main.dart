@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'data/repository/todos/todos_repository_dev.dart';
+import 'data/repository/todos/todos_repository_remote.dart';
+import 'data/services/api_client.dart';
 import 'ui/todo/viewmodels/todo_view_model.dart';
 import 'ui/todo/widgtes/todo_screen.dart';
 
@@ -21,7 +22,9 @@ class MainApp extends StatelessWidget {
       ),
       home: TodoScreen(
         todoViewModel: TodoViewModel(
-          todosRepository: TodosRepositoryDev(), //
+          todosRepository: TodosRepositoryRemote(
+            apiClient: ApiClient(host: "192.168.0.238"),
+          ),
         ),
       ),
     );
