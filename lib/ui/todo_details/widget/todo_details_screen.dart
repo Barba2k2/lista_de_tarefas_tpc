@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../view_models/todos_details_view_model.dart';
+import 'todo_description_widget.dart';
 import 'todo_name_widget.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
@@ -44,8 +45,17 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           builder: (context, child) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TodoNameWidget(
-                todo: widget.todoDetailsViewModel.todo, //
+              child: Column(
+                spacing: 8,
+                children: [
+                  TodoNameWidget(
+                    todo: widget.todoDetailsViewModel.todo, //
+                  ),
+                  if (widget.todoDetailsViewModel.todo.description.isNotEmpty)
+                    TodoDescriptionWidget(
+                      todo: widget.todoDetailsViewModel.todo,
+                    ),
+                ],
               ),
             );
           },
