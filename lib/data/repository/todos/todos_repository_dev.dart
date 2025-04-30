@@ -6,12 +6,18 @@ class TodosRepositoryDev implements TodosRepository {
   final List<Todo> _todos = [];
 
   @override
-  Future<Result<Todo>> add(String name) async {
+  Future<Result<Todo>> add({
+    required String name,
+    required String description,
+    required bool done,
+  }) async {
     final lastTodoIndex = _todos.length;
 
     final Todo cretaedTodo = Todo(
       id: (lastTodoIndex + 1).toString(),
-      name: name, //
+      name: name,
+      description: description,
+      done: done,
     );
 
     return Result.ok(cretaedTodo);
@@ -29,7 +35,7 @@ class TodosRepositoryDev implements TodosRepository {
   Future<Result<List<Todo>>> get() async {
     return Result.ok(_todos);
   }
-  
+
   @override
   Future<Result<Todo>> getById(String id) async {
     return Result.ok(_todos.firstWhere((todo) => todo.id == id));
