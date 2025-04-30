@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'data/repository/todos/todos_repository_remote.dart';
-import 'data/services/api_client.dart';
-import 'ui/todo/viewmodels/todo_view_model.dart';
-import 'ui/todo/widgtes/todo_screen.dart';
+import 'routing/router.dart';
 
 void main() {
   runApp(const MainApp());
@@ -14,19 +11,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Lista de Tarefas',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: false, //
       ),
-      home: TodoScreen(
-        todoViewModel: TodoViewModel(
-          todosRepository: TodosRepositoryRemote(
-            apiClient: ApiClient(host: "192.168.0.238"),
-          ),
-        ),
-      ),
+      routerConfig: routerConfig(),
     );
   }
 }
