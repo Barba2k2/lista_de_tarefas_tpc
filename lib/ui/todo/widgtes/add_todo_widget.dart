@@ -104,7 +104,9 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() == true) {
-                    widget.todoViewModel.addTodo.execute(_todoEC.text);
+                    widget.todoViewModel.addTodo.execute(
+                      (_todoEC.text, "", false), //
+                    );
                   }
                 },
                 child: const Text('Adicionar'), //
