@@ -16,7 +16,8 @@ class AddTodoWidget extends StatefulWidget {
 
 class _AddTodoWidgetState extends State<AddTodoWidget> {
   final _formKey = GlobalKey<FormState>();
-  final _todoEC = TextEditingController();
+  final _todoNameEC = TextEditingController();
+  final _descriptionEC = TextEditingController();
 
   @override
   void initState() {
@@ -67,7 +68,8 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
 
   @override
   void dispose() {
-    _todoEC.dispose();
+    _todoNameEC.dispose();
+    _descriptionEC.dispose();
     widget.todoViewModel.addTodo.removeListener(_onResult);
     super.dispose();
   }
@@ -76,42 +78,65 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: IntrinsicHeight(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            spacing: 16,
-            children: [
-              Row(
-                children: [
-                  Text('Adicione novas tarefas'), //
-                ],
-              ),
-              TextFormField(
-                controller: _todoEC,
-                decoration: InputDecoration(
-                  hintText: 'Tarefa',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              spacing: 16,
+              children: [
+                Row(
+                  children: [
+                    Text('Adicione novas tarefas'), //
+                  ],
                 ),
-                validator: (value) {
-                  if (value == null || value.trim() == '') {
-                    return 'Por favor, prrencha o campo de tarefa';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() == true) {
-                    widget.todoViewModel.addTodo.execute(
-                      (_todoEC.text, "", false), //
-                    );
-                  }
-                },
-                child: const Text('Adicionar'), //
-              ),
-            ], //
+                TextFormField(
+                  controller: _todoNameEC,
+                  decoration: InputDecoration(
+                    hintText: 'Nome da Tarefa',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim() == '') {
+                      return 'Por favor, prrencha o campo de nome da tarefa';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  minLines: 3,
+                  maxLines: null,
+                  controller: _descriptionEC,
+                  decoration: InputDecoration(
+                    hintText: 'Descrição da tarefa',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim() == '') {
+                      return 'Por favor, prrencha o campo de descrição da tarefa';
+                    }
+                    return null;
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() == true) {
+                      widget.todoViewModel.addTodo.execute(
+                        (
+                          _todoNameEC.text, //
+                          _descriptionEC.text, //
+                          false,
+                        ), //
+                      );
+                    }
+                  },
+                  child: const Text('Adicionar'), //
+                ),
+              ], //
+            ),
           ),
         ),
       ),
