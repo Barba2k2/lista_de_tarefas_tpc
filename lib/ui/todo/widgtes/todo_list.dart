@@ -28,7 +28,7 @@ class TodoList extends StatelessWidget {
       itemCount: todos.length,
       itemBuilder: (context, index) {
         return TodoTile(
-          todos: todos[index],
+          todo: todos[index],
           todoViewModel: todoViewModel,
           onDeleteTodo: onDeleteTodo,
         );
