@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../routing/routes.dart';
 import '../../../utils/typedefs/todos.dart';
 import '../../../domain/models/todo.dart';
 import '../viewmodels/todo_view_model.dart';
 
-class TodoTile extends StatefulWidget {
+class TodoTile extends StatelessWidget {
   final Todo todos;
   final TodoViewModel todoViewModel;
   final OnDeleteTodo onDeleteTodo;
@@ -17,26 +19,26 @@ class TodoTile extends StatefulWidget {
   });
 
   @override
-  State<TodoTile> createState() => _TodoTileState();
-}
-
-class _TodoTileState extends State<TodoTile> {
-  
-
-  
-
-  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text('${widget.todos.id}'),
-      title: Text(widget.todos.name),
-      trailing: IconButton(
-        onPressed: () {
-          widget.todoViewModel.deleteTodo.execute(widget.todos);
-        },
-        icon: const Icon(
-          Icons.delete,
-          color: Colors.red, //
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          Routes.todoDetails(todos.id), //
+        );
+      },
+      child: Card(
+        child: ListTile(
+          leading: Text(todos.id),
+          title: Text(todos.name),
+          trailing: IconButton(
+            onPressed: () {
+              todoViewModel.deleteTodo.execute(todos);
+            },
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red, //
+            ),
+          ),
         ),
       ),
     );
