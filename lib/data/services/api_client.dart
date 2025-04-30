@@ -26,7 +26,7 @@ class ApiClient {
 
       final response = await request.close();
 
-      if (response.statusCode != HttpStatus.ok) {
+      if (response.statusCode == HttpStatus.ok) {
         final stringData = await response.transform(utf8.decoder).join();
 
         final json = jsonDecode(stringData) as List<dynamic>;
