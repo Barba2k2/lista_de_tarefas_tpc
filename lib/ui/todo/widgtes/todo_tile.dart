@@ -7,13 +7,13 @@ import '../../../domain/models/todo.dart';
 import '../viewmodels/todo_view_model.dart';
 
 class TodoTile extends StatelessWidget {
-  final Todo todos;
+  final Todo todo;
   final TodoViewModel todoViewModel;
   final OnDeleteTodo onDeleteTodo;
 
   const TodoTile({
     super.key,
-    required this.todos,
+    required this.todo,
     required this.todoViewModel,
     required this.onDeleteTodo,
   });
@@ -23,16 +23,23 @@ class TodoTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.push(
-          Routes.todoDetails(todos.id), //
+          Routes.todoDetails(todo.id), //
         );
       },
       child: Card(
         child: ListTile(
-          leading: Text(todos.id),
-          title: Text(todos.name),
+          leading: Checkbox(
+            value: todo.done,
+            onChanged: (value) {
+              todoViewModel.updateTodo.execute(
+                todo.copyWith(done: value!), //
+              );
+            },
+          ),
+          title: Text(todo.name),
           trailing: IconButton(
             onPressed: () {
-              todoViewModel.deleteTodo.execute(todos);
+              todoViewModel.deleteTodo.execute(todo);
             },
             icon: const Icon(
               Icons.delete,
