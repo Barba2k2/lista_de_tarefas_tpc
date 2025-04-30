@@ -36,7 +36,7 @@ void main() {
       expect(result.asOk, isA<Result<void>>());
     });
 
-    test('Should update Todo when deleteTodo()', () async {
+    test('Should update a Todo when updateTodo()', () async {
       const todoToCreate = CreateTodoApiModel(name: 'Todo created on TEST');
 
       final createdTodoResult = await apiClient.postTodo(todoToCreate);
@@ -44,11 +44,28 @@ void main() {
       final result = await apiClient.updateTodo(
         UpdateTodoApiModel(
           id: createdTodoResult.asOk.value.id,
-          name: "${createdTodoResult.asOk.value.name} updatedDate ${DateTime.now().toIso8601String()}",
+          name:
+              "${createdTodoResult.asOk.value.name} updatedDate ${DateTime.now().toIso8601String()}",
         ),
       );
 
       expect(result.asOk, isA<Result<Todo>>());
+    });
+
+    test('Should getTodoById', () async {
+      const todoToCreate = CreateTodoApiModel(
+        name: 'Todo created on TEST', //
+      );
+
+      final createdTodoResult = await apiClient.postTodo(todoToCreate);
+
+      final result = await apiClient.getTodoById(
+        createdTodoResult.asOk.value.id, //
+      );
+
+      expect(result.asOk, isA<Result<Todo>>());
+
+      expect(result.asOk.value.id, createdTodoResult.asOk.value.id);
     });
   });
 }
