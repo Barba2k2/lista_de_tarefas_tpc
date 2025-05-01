@@ -18,8 +18,8 @@ class TodoUpdateUseCase {
 
       switch (result) {
         case Ok<Todo>():
-          return Result.ok(result.value);
           _logger.fine('Tarefa atualizada com sucesso');
+          return Result.ok(result.value);
         default:
           return result;
       }
