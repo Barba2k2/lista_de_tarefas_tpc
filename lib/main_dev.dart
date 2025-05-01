@@ -14,6 +14,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final todosRepository = TodosRepositoryDev();
+
     return MaterialApp(
       title: 'Lista de Tarefas',
       theme: ThemeData(
@@ -23,9 +25,9 @@ class MainApp extends StatelessWidget {
       home: TodoScreen(
         todoViewModel: TodoViewModel(
           todoUpdateUseCase: TodoUpdateUseCase(
-            todosRepository: TodosRepositoryDev(),
+            todosRepository: todosRepository,
           ),
-          todosRepository: TodosRepositoryDev(), //
+          todosRepository: todosRepository,
         ),
       ),
     );
