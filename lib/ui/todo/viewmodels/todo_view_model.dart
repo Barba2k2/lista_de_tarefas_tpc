@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 import '../../../domain/use_cases/todo_update_use_case.dart';
 import '../../../utils/command/command.dart';
@@ -38,57 +39,79 @@ class TodoViewModel extends ChangeNotifier {
 
   List<Todo> get todos => _todos;
 
+  final _logger = Logger('TodoViewModel');
+
   Future<Result> _load() async {
-    final result = await _todosRepository.get();
-
-    switch (result) {
-      case Ok<List<Todo>>():
-        _todos = result.value;
-        notifyListeners();
-        break;
-      case Error():
-        // TODO: implement logging
-        break;
+    try {
+      final result = await _todosRepository.get();
+      
+      switch (result) {
+        case Ok<List<Todo>>():
+          _todos = result.value;
+          _logger.fine('Tarefas carregadas com sucesso');
+          break;
+        case Error():
+          _logger.warning('Falha ao carregar tarefas', result.error);
+          break;
+      }
+      
+      return result;
+    } on Exception catch (e, s) {
+      _logger.severe('Erro ao carregar tarefas', e, s);
+      return Result.error(e);
+    } finally {
+      notifyListeners();
     }
-
-    return result;
   }
 
   Future<Result<Todo>> _addTodo((String, String, bool) todo) async {
-    final (name, description, done) = todo;
+    try {
+      final (name, description, done) = todo;
 
-    final result = await _todosRepository.add(
-      name: name,
-      description: description,
-      done: done,
-    );
+      final result = await _todosRepository.add(
+        name: name,
+        description: description,
+        done: done,
+      );
 
-    switch (result) {
-      case Ok<Todo>():
-        _todos.add(result.value);
-        notifyListeners();
-        break;
-      case Error():
-        // TODO: implement logging
-        break;
+      switch (result) {
+        case Ok<Todo>():
+          _todos.add(result.value);
+          _logger.fine('Tarefa adicionada com sucesso');
+          break;
+        case Error():
+          _logger.warning('Falha ao adicionar tarefa', result.error);
+          break;
+      }
+
+      return result;
+    } on Exception catch (e, s) {
+      _logger.warning('Erro ao adicionar tarefa', e, s);
+      return Result.error(e);
+    } finally {
+      notifyListeners();
     }
-
-    return result;
   }
 
   Future<Result<void>> _deleteTodo(Todo todo) async {
-    final result = await _todosRepository.delete(todo);
+    try {
+      final result = await _todosRepository.delete(todo);
 
-    switch (result) {
-      case Ok<void>():
-        _todos.remove(todo);
-        notifyListeners();
-        break;
-      case Error():
-        // TODO: implement logging
-        break;
+      switch (result) {
+        case Ok<void>():
+          _todos.remove(todo);
+          break;
+        case Error():
+          _logger.warning('Falha ao deletar tarefa', result.error);
+          break;
+      }
+
+      return result;
+    } on Exception catch (e, s) {
+      _logger.warning('Erro ao deletar tarefa', e, s);
+      return Result.error(e);
+    } finally {
+      notifyListeners();
     }
-
-    return result;
   }
 }
