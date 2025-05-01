@@ -8,21 +8,30 @@ class TodosRepositoryDev extends ChangeNotifier implements TodosRepository {
   final List<Todo> _todos = [];
 
   @override
+  List<Todo> get todos => _todos;
+
+  @override
   Future<Result<Todo>> add({
     required String name,
     required String description,
     required bool done,
   }) async {
-    final lastTodoIndex = _todos.length;
+    try {
+      final lastTodoIndex = _todos.length;
 
-    final Todo cretaedTodo = Todo(
-      id: (lastTodoIndex + 1).toString(),
-      name: name,
-      description: description,
-      done: done,
-    );
+      final Todo cretaedTodo = Todo(
+        id: (lastTodoIndex + 1).toString(),
+        name: name,
+        description: description,
+        done: done,
+      );
 
-    return Result.ok(cretaedTodo);
+      return Result.ok(cretaedTodo);
+    } on Exception catch (e) {
+      return Result.error(e);
+    } finally {
+      notifyListeners();
+    }
   }
 
   @override
@@ -42,17 +51,19 @@ class TodosRepositoryDev extends ChangeNotifier implements TodosRepository {
   Future<Result<Todo>> getById(String id) async {
     return Result.ok(_todos.firstWhere((todo) => todo.id == id));
   }
-  
+
   @override
   Future<Result<Todo>> updateTodo(Todo todo) async {
-    final todoIndex = _todos.indexWhere((t) => t.id == todo.id);
+    try {
+      final todoIndex = _todos.indexWhere((t) => t.id == todo.id);
 
-    _todos[todoIndex] = todo;
+      _todos[todoIndex] = todo;
 
-    return Result.ok(todo);
+      return Result.ok(todo);
+    } on Exception catch (e) {
+      return Result.error(e);
+    } finally {
+      notifyListeners();
+    }
   }
-  
-  @override
-  // TODO: implement todos
-  List<Todo> get todos => throw UnimplementedError();
 }
