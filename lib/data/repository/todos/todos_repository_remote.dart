@@ -15,6 +15,8 @@ class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
 
   List<Todo> _todos = [];
 
+  final Map<String, Todo> _cachedTodos = {};
+
   @override
   List<Todo> get todos => _todos;
 
@@ -35,6 +37,7 @@ class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
 
       switch (result) {
         case Ok<Todo>():
+          _cachedTodos[result.value.id] = result.value;
           return Result.ok(result.value);
         default:
           return result;
@@ -53,6 +56,7 @@ class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
 
       switch (result) {
         case Ok<void>():
+          _cachedTodos.remove(todo.id);
           return Result.ok(null);
         default:
           return result;
@@ -85,11 +89,16 @@ class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
 
   @override
   Future<Result<Todo>> getById(String id) async {
+    if (_cachedTodos[id] != null) {
+      return Result.ok(_cachedTodos[id]!);
+    }
+
     try {
       final result = await _apiClient.getTodoById(id);
 
       switch (result) {
         case Ok<Todo>():
+          _cachedTodos[id] = result.value;
           return Result.ok(result.value);
         default:
           return result;
@@ -115,6 +124,7 @@ class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
         case Ok<Todo>():
           final todoIndex = _todos.indexWhere((t) => t.id == todo.id);
           _todos[todoIndex] = result.value;
+          _cachedTodos[todo.id] = result.value;
           return Result.ok(result.value);
         default:
           return result;
