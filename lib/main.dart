@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'routing/router.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'main_dev.dart' as main_dev;
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() => main_dev.main();
+
+class ListaDeTarefasApp extends StatelessWidget {
+  const ListaDeTarefasApp({super.key});
 
   @override
   Widget build(BuildContext context) {
