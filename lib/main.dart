@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'config/theme/app_theme.dart';
 import 'routing/router.dart';
 
 import 'main_dev.dart' as main_dev;
@@ -13,10 +14,7 @@ class ListaDeTarefasApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Lista de Tarefas',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: false, //
-      ),
+      theme: AppTheme.lightTheme,
       routerConfig: routerConfig(),
     );
   }
