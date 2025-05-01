@@ -26,10 +26,54 @@ class _EditTodoWidgetState extends State<EditTodoWidget> {
   );
 
   @override
+  void initState() {
+    widget.todoDetailsViewModel.updateTodo.addListener(_onUpdateTodo);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _nameEC.dispose();
     _descriptionEC.dispose();
+    widget.todoDetailsViewModel.updateTodo.removeListener(_onUpdateTodo);
     super.dispose();
+  }
+
+  void _onUpdateTodo() {
+    final command = widget.todoDetailsViewModel.updateTodo;
+    if (command.running) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            content: IntrinsicHeight(
+              child: Center(
+                child: CircularProgressIndicator.adaptive(), //
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      context.pop();
+      if (command.completed) {
+        context.pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Tarefa atualizada com sucesso'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Ocorreu um erro ao atualizar a tarefa'),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -71,25 +115,30 @@ class _EditTodoWidgetState extends State<EditTodoWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 120,
+                  width: 110,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState?.validate() == true) {
-                        //
+                        widget.todoDetailsViewModel.updateTodo.execute(
+                          widget.todo.copyWith(
+                            name: _nameEC.text,
+                            description: _descriptionEC.text,
+                          ),
+                        );
                       }
                     },
                     child: Text(
                       'Salvar',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 120,
+                  width: 110,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
@@ -98,7 +147,7 @@ class _EditTodoWidgetState extends State<EditTodoWidget> {
                     child: Text(
                       'Cancelar',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
