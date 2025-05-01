@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'data/repository/todos/todos_repository_dev.dart';
+import 'domain/use_cases/todo_update_use_case.dart';
 import 'ui/todo/viewmodels/todo_view_model.dart';
 import 'ui/todo/widgtes/todo_screen.dart';
 
@@ -21,6 +22,9 @@ class MainApp extends StatelessWidget {
       ),
       home: TodoScreen(
         todoViewModel: TodoViewModel(
+          todoUpdateUseCase: TodoUpdateUseCase(
+            todosRepository: TodosRepositoryDev(),
+          ),
           todosRepository: TodosRepositoryDev(), //
         ),
       ),
