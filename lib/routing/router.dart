@@ -1,9 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../data/repository/todos/todos_repository_remote.dart';
-import '../data/services/api_client.dart';
-import '../domain/use_cases/todo_update_use_case.dart';
 import '../ui/todo/viewmodels/todo_view_model.dart';
 import '../ui/todo/widgtes/todo_screen.dart';
 import '../ui/todo_details/view_models/todo_details_view_model.dart';
