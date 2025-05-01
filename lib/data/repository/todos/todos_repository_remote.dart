@@ -1,15 +1,22 @@
+import 'package:flutter/material.dart';
+
 import '../../../domain/models/todo.dart';
 import '../../../utils/result/result.dart';
 import '../../services/api_client.dart';
 import '../../services/models/todo/todo_api_model.dart';
 import 'todos_repository.dart';
 
-class TodosRepositoryRemote implements TodosRepository {
+class TodosRepositoryRemote extends ChangeNotifier implements TodosRepository {
   final ApiClient _apiClient;
 
   TodosRepositoryRemote({
     required ApiClient apiClient, //
   }) : _apiClient = apiClient;
+
+  List<Todo> _todos = [];
+
+  @override
+  List<Todo> get todos => _todos;
 
   @override
   Future<Result<Todo>> add({
@@ -34,6 +41,8 @@ class TodosRepositoryRemote implements TodosRepository {
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -50,6 +59,8 @@ class TodosRepositoryRemote implements TodosRepository {
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -60,12 +71,15 @@ class TodosRepositoryRemote implements TodosRepository {
 
       switch (result) {
         case Ok<List<Todo>>():
+          _todos = result.value;
           return Result.ok(result.value);
         default:
           return result;
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -99,12 +113,16 @@ class TodosRepositoryRemote implements TodosRepository {
 
       switch (result) {
         case Ok<Todo>():
+          final todoIndex = _todos.indexWhere((t) => t.id == todo.id);
+          _todos[todoIndex] = result.value;
           return Result.ok(result.value);
         default:
           return result;
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 }

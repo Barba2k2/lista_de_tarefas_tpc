@@ -10,12 +10,16 @@ class TodoViewModel extends ChangeNotifier {
   TodoViewModel({
     required TodosRepository todosRepository, //
     required TodoUpdateUseCase todoUpdateUseCase,
-  })  : _todosRepository = todosRepository,
-        _todoUpdateUseCase = todoUpdateUseCase {
+  }) : _todosRepository = todosRepository,
+       _todoUpdateUseCase = todoUpdateUseCase {
     load = Command0(_load)..execute();
     addTodo = Command1(_addTodo);
     deleteTodo = Command1(_deleteTodo);
     updateTodo = Command1(_todoUpdateUseCase.updateTodo);
+    _todosRepository.addListener(() {
+      _todos = _todosRepository.todos;
+      notifyListeners();
+    });
   }
 
   final TodosRepository _todosRepository;
