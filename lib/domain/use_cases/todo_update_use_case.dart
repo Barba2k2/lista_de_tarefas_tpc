@@ -1,9 +1,12 @@
+import 'package:logging/logging.dart';
+
 import '../../data/repository/todos/todos_repository.dart';
 import '../../utils/result/result.dart';
 import '../models/todo.dart';
 
 class TodoUpdateUseCase {
   final TodosRepository _todosRepository;
+  final _logger = Logger('TodoUpdateUseCase');
 
   TodoUpdateUseCase({
     required TodosRepository todosRepository, //
@@ -16,10 +19,12 @@ class TodoUpdateUseCase {
       switch (result) {
         case Ok<Todo>():
           return Result.ok(result.value);
+          _logger.fine('Tarefa atualizada com sucesso');
         default:
           return result;
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
+      _logger.warning('Erro ao atualizar tarefa', e, s);
       return Result.error(e);
     }
   }
