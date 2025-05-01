@@ -12,7 +12,7 @@ class TodoViewModel extends ChangeNotifier {
     required TodosRepository todosRepository, //
     required TodoUpdateUseCase todoUpdateUseCase,
   }) : _todosRepository = todosRepository,
-       _todoUpdateUseCase = todoUpdateUseCase {
+        _todoUpdateUseCase = todoUpdateUseCase {
     load = Command0(_load)..execute();
     addTodo = Command1(_addTodo);
     deleteTodo = Command1(_deleteTodo);
@@ -44,7 +44,7 @@ class TodoViewModel extends ChangeNotifier {
   Future<Result> _load() async {
     try {
       final result = await _todosRepository.get();
-      
+
       switch (result) {
         case Ok<List<Todo>>():
           _todos = result.value;
@@ -54,7 +54,7 @@ class TodoViewModel extends ChangeNotifier {
           _logger.warning('Falha ao carregar tarefas', result.error);
           break;
       }
-      
+
       return result;
     } on Exception catch (e, s) {
       _logger.severe('Erro ao carregar tarefas', e, s);
@@ -76,7 +76,6 @@ class TodoViewModel extends ChangeNotifier {
 
       switch (result) {
         case Ok<Todo>():
-          _todos.add(result.value);
           _logger.fine('Tarefa adicionada com sucesso');
           break;
         case Error():
@@ -88,9 +87,8 @@ class TodoViewModel extends ChangeNotifier {
     } on Exception catch (e, s) {
       _logger.warning('Erro ao adicionar tarefa', e, s);
       return Result.error(e);
-    } finally {
-      notifyListeners();
     }
+    // O listener do repositório chama o notifyListeners()
   }
 
   Future<Result<void>> _deleteTodo(Todo todo) async {
@@ -99,7 +97,7 @@ class TodoViewModel extends ChangeNotifier {
 
       switch (result) {
         case Ok<void>():
-          _todos.remove(todo);
+          _logger.fine('Tarefa removida com sucesso');
           break;
         case Error():
           _logger.warning('Falha ao deletar tarefa', result.error);
@@ -110,8 +108,6 @@ class TodoViewModel extends ChangeNotifier {
     } on Exception catch (e, s) {
       _logger.warning('Erro ao deletar tarefa', e, s);
       return Result.error(e);
-    } finally {
-      notifyListeners();
     }
   }
 }
