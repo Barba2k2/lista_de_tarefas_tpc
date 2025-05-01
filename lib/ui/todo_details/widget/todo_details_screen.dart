@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../view_models/todos_details_view_model.dart';
+import '../view_models/todo_details_view_model.dart';
+import 'edit_todo_widget.dart';
 import 'todo_description_widget.dart';
 import 'todo_name_widget.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
-  final TodosDetailsViewModel todoDetailsViewModel;
+  final TodoDetailsViewModel todoDetailsViewModel;
 
   const TodoDetailsScreen({
     super.key,
@@ -58,6 +59,31 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 ],
               ),
             );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: EditTodoWidget(
+                  todo: widget.todoDetailsViewModel.todo,
+                  todoDetailsViewModel: widget.todoDetailsViewModel,
+                ),
+              );
+            },
+          );
+        },
+        child: ListenableBuilder(
+          listenable: widget.todoDetailsViewModel.load,
+          builder: (context, child) {
+            if (widget.todoDetailsViewModel.load.running ||
+                widget.todoDetailsViewModel.load.error) {
+              return SizedBox.shrink();
+            }
+            return Icon(Icons.edit);
           },
         ),
       ),
