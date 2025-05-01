@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../data/repository/todos/todos_repository_remote.dart';
 import '../data/services/api_client.dart';
@@ -10,16 +11,6 @@ import '../ui/todo_details/widget/todo_details_screen.dart';
 import 'routes.dart';
 
 GoRouter routerConfig() {
-  final todosRepository = TodosRepositoryRemote(
-    apiClient: ApiClient(
-      host: "192.168.0.238", //
-    ),
-  );
-
-  final todoUpdateUseCase = TodoUpdateUseCase(
-    todosRepository: todosRepository, //
-  );
-
   return GoRouter(
     initialLocation: Routes.todos,
     routes: [
@@ -28,8 +19,8 @@ GoRouter routerConfig() {
         builder: (context, state) {
           return TodoScreen(
             todoViewModel: TodoViewModel(
-              todosRepository: todosRepository,
-              todoUpdateUseCase: todoUpdateUseCase,
+              todosRepository: context.read(),
+              todoUpdateUseCase: context.read(),
             ),
           );
         },
@@ -39,8 +30,8 @@ GoRouter routerConfig() {
             builder: (context, state) {
               final todoId = state.pathParameters['id'] ?? '';
               final todoDetailsViewModel = TodoDetailsViewModel(
-                todosRepository: todosRepository,
-                todoUpdateUseCase: todoUpdateUseCase,
+                todosRepository: context.read(),
+                todoUpdateUseCase: context.read(),
               );
 
               todoDetailsViewModel.load.execute(todoId);
